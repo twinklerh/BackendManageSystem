@@ -4,6 +4,7 @@ export const useSettingStore = defineStore('setting', {
     state(){
         return {
             isMenuFold: false,
+            refreshInNavBarButton: false,
         }
     }
 })

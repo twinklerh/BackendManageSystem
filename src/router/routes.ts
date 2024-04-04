@@ -27,7 +27,7 @@ export const routes = [
         name: 'home',
         component: ()=>import("@/views/layout/IndexView.vue"),
         redirect: '/home/screen',
-        meta: { title: '首页', icon: 'Plus', hidden: true },
+        meta: { title: '', icon: 'HomeFilled', hidden: true },
         children: [
             {
                 path: 'acl',
