@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div class="aside-menu">
+        <div class="aside-menu" :class="{fold:settingStore.isMenuFold?true:false}">
             <div class="logo">
                 <img id="imglogo" src="@/assets/logo.svg" height="40px">
                 <span class="nav-title">{{ nav.title }}</span>
@@ -9,8 +9,10 @@
                 <MenuView></MenuView>
             </el-scrollbar>
         </div>
-        <div class="nav-top"></div>
-        <div class="content-main">
+        <div class="nav-top" :class="{fold:settingStore.isMenuFold?true:false}">
+            <TopNavBarView></TopNavBarView>
+        </div>
+        <div class="content-main" :class="{fold:settingStore.isMenuFold?true:false}">
             <div class="main-container">
                 <router-view></router-view>
             </div>
@@ -21,7 +23,9 @@
 <script lang="ts" setup>
 import { nav } from '@/setting';
 import MenuView from './MenuView.vue';
-
+import TopNavBarView from './TopNavBarView.vue';
+import { useSettingStore } from '@/store/setting';
+const settingStore = useSettingStore();
 </script>
 
 <style lang="scss" scoped>
@@ -32,13 +36,16 @@ import MenuView from './MenuView.vue';
         width: $base-menu-width;
         height: 100vh;
         background-color: $base-menu-background;
+        transition: all 5000ms;
         .logo {
             width: 100%;
             height: $base-menu-logo-height;
+            margin-left: 7px;
             display: flex;
+            justify-content: left;
             align-items: center;
-            justify-content: center;
             .nav-title {
+                display: inline;
                 font-size: $base-logo-title-fontSize;
                 color: white;
                 padding: 15px;
@@ -49,6 +56,9 @@ import MenuView from './MenuView.vue';
             width: 100%;
             color: white;
         }
+        &.fold {    //  & 表示父级选择器，这里指aside-menu的dom节点的fold类
+            width: $base-menu-min-width;
+        }
     }
     .nav-top {
         position: fixed;
@@ -56,7 +66,11 @@ import MenuView from './MenuView.vue';
         left: $base-menu-width;
         width: calc(100% - $base-menu-width);
         height: $base-tabbar-height;
-        background: cyan;
+        transition: all 5000ms;
+        &.fold {
+            width: calc(100vw - $base-menu-min-width);
+            left: $base-menu-min-width;
+        }
     }
     .content-main {
         position: absolute;
@@ -66,6 +80,11 @@ import MenuView from './MenuView.vue';
         height: calc(100vh - $base-tabbar-height);
         background-color: yellowgreen;
         overflow: auto;
+        transition: all 5000ms;
+        &.fold {
+            width: calc(100vw - $base-menu-min-width);
+            left: $base-menu-min-width;
+        }
     }
 }
 
