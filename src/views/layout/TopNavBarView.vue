@@ -19,12 +19,12 @@
             <el-button circle @click="fullScreen" icon="FullScreen"></el-button>
             <el-button circle icon="Setting"></el-button>
             <el-dropdown style="padding: 15px;" trigger="click">
-                <span style="display: flex; align-items: center;">
-                    <img src="@/assets/UserDefaultImg.png"  height="30px"/>
-                    <el-icon><ArrowDown /></el-icon>
+                <span class="el-dropdown">
+                    {{ userStore.username }}
+                    <img :src="userStore.avatar" height="30px" width="30px" style="border-radius: 50%;"/>
                 </span>
                 <template #dropdown>
-                    <el-dropdown-item>123</el-dropdown-item>
+                    <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
                 </template>
             </el-dropdown>
        </div> 
@@ -33,9 +33,12 @@
 
 <script lang="ts" setup>
 import { useSettingStore } from '@/store/setting';
-import { useRoute } from 'vue-router';
+import { useUserStore } from '@/store/user';
+import { useRoute, useRouter } from 'vue-router';
 const route = useRoute();
+const router = useRouter();
 const settingStore = useSettingStore();
+const userStore = useUserStore()
 const refresh = ()=>{
     settingStore.refreshInNavBarButton = !settingStore.refreshInNavBarButton;
 }
@@ -43,6 +46,10 @@ const fullScreen = ()=>{
     const full = document.fullscreenElement;    //  dom对象的一个属性，用来判断是否是全屏，返回值是bool类型
     if(!full)    document.documentElement.requestFullscreen();
     else         document.exitFullscreen();
+}
+const logout = () => {
+    localStorage.setItem("jwt_token", "");
+    router.push({name: 'login'});
 }
 </script>
 
@@ -63,5 +70,12 @@ const fullScreen = ()=>{
     display: flex;
     align-items: center;
     margin-right: 55px;
+}
+.el-dropdown {
+    display: flex; 
+    align-items: center;
+}
+.el-dropdown:hover {
+    cursor: pointer;
 }
 </style>

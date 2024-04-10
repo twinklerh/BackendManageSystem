@@ -41,25 +41,27 @@ const login = async() => {
     try {
         await userStore.login(loginForm);
         ElNotification({type: 'success', message: '欢迎回来', title: `Hi, ${getWhenTime()}好`});
-        loginLoading.value = false;
-    } catch(error)  {
         router.push('/')
+    } catch(error)  {
+        // router.push('/login')
+    } finally {
+        loginLoading.value = false;
     }
 }
 
-const validateUsername = (rule:unknown, value:string, callback:(param?:Error)=>void)=>{  //  rule校验规则、value表单文本内容、规则放行函数
-    if(value.length>=5)    {
-        callback();
-    }   else    {
-        callback(new Error('账号长度在5~10位之间'))
-    }
-}
+// const validateUsername = (rule:unknown, value:string, callback:(param?:Error)=>void)=>{  //  rule校验规则、value表单文本内容、规则放行函数
+//     if(value.length>=5)    {
+//         callback();
+//     }   else    {
+//         callback(new Error('账号长度在5~10位之间'))
+//     }
+// }
 
 const rules = {
     username: [
         { required: true, message: '用户名不能为空', trigger: 'blur' }, //  blur失去焦点时触发
-        { required: true, min: 6, max: 16, message: '用户名不能为空', trigger: 'blur' },
-        { trigger: 'change', validator: validateUsername }  //  自定义校验规则
+        { required: true, min: 5, max: 16, message: '用户名不能为空', trigger: 'blur' },
+        // { trigger: 'change', validator: validateUsername }  //  自定义校验规则
     ],
     password: [
         { required: true, min: 6, message: '密码至少为6位', trigger: 'change'},

@@ -33,7 +33,7 @@ export const routes = [
                 path: 'acl',
                 name: 'acl',
                 meta: { title: '权限管理', icon: 'Key', hidden: false },
-                redirect: '/acl/user',
+                redirect: '/home/acl/user',
                 children: [
                     {
                         path: 'user',
