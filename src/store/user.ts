@@ -10,16 +10,9 @@ export interface loginForm {    //  登录接口 发给后端的数据类型
 
 export interface loginResponseData {    //  登录接口 后端返回给前端的数据类型
     code: number,
-    data: {
-        token?: string,
-        message: string
-    }
-}
-
-export interface userResponseData {     //  获取信息接口 后端返回给前端的数据类型
-    code: number,
-    data: user,
-
+    data: string,
+    message: string,
+    ok: boolean
 }
 
 interface user {
@@ -36,6 +29,18 @@ interface user {
     }
 }
 
+export interface userInfoResponseData { 
+    code: number, messaage: string, ok: boolean,
+    data: {
+        routes: [],
+        buttons: [],
+        roles: [],
+        name: string,
+        avatar: string
+    }
+
+}
+
 export const useUserStore = defineStore('user', {
     state: (): UserState => {
         return {
@@ -49,16 +54,15 @@ export const useUserStore = defineStore('user', {
         async login(data: loginForm) {
             const result: loginResponseData = await reqLogin(data);
             if (result.code === 200) {
-                this.token = result.data as unknown as string;
-                localStorage.setItem("token", result.data as unknown as string)
+                this.token = result.data;
+                localStorage.setItem("token", result.data)
             }
         },
         async userInfo() {
-            const result = await reqUserInfo();
-            console.log(result)
+            const result:userInfoResponseData = await reqUserInfo();
             if (result.code === 200) {
                 this.username = result.data.name;
-                this.avatar = result.data.avatar;
+                this.avatar = result.data.avatar
                 return "ok";
             }   else    {
                 return Promise.reject('获取用户信息失败');

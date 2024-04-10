@@ -48,8 +48,9 @@ const fullScreen = ()=>{
     else         document.exitFullscreen();
 }
 const logout = () => {
-    localStorage.setItem("jwt_token", "");
-    router.push({name: 'login'});
+    userStore.token = '';
+    localStorage.removeItem("token")
+    router.push({path: '/login'})
 }
 </script>
 
