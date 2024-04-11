@@ -31,14 +31,16 @@ export interface BrandResponseData extends ResponseData {
 }
 
 //  page表示获取第几页，limit表示获取几个已有品牌的数据
-export const reqGetHasBrand = async (page: number, limit: number) => request.get<any, BrandResponseData>(API.BRAND_URL + `${page}/${limit}`)
+export const reqGetHasBrand = async (page: number, limit: number) => {
+    return request.get<any, BrandResponseData>(API.BRAND_URL + `${page}/${limit}`)
+}
 
 export const reqAddOrUpdateBrand = async (data:Record) => {
     if(data.id) {   //  修改品牌
-        return request.put<any, any>(API.UPDATEBRAND_URL)
+        return request.put<any, any>(API.UPDATEBRAND_URL, data)
     }   else    {   //  添加品牌
-        return request.post<any, any>(API.ADDBRAND_URL)
+        return request.post<any, any>(API.ADDBRAND_URL, data)
     }
 } 
 
-export const reqDeleteBrand = (id:number) => request.delete<any,any>(API.DELETE_URL)
+export const reqDeleteBrand = (id:number) => request.delete<any,any>(API.DELETE_URL + id)

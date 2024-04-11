@@ -120,7 +120,6 @@ const cancel = () => {
 const confirm = async () => {
     await formRef.value.validate()     //  校验不通过后续代码不执行，单词别写错了！
     const result = await reqAddOrUpdateBrand(brandParams);
-    console.log(result)
     if(result.code === 200) {
         ElMessage({type: 'success', message: brandParams.id ? '修改品牌成功' : '添加品牌成功'});
         getBrand();
@@ -152,7 +151,6 @@ const validatorTmName = (rule:any, value:string, callback:any) => {   //  传入
 }
 
 const validatorLogoUrl = (rule:any, value:string, callback:any) => {
-    console.log(147, value)
     if(value)   callback();
     else        callback(new Error("图片务必上传"))
 }
