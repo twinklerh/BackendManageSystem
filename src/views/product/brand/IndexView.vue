@@ -6,14 +6,18 @@
         <el-table-column type="index" label="品牌序号" width="90px" align="center"></el-table-column>
         <el-table-column prop="tmName" label="品牌名称"></el-table-column>
         <el-table-column label="品牌LOGO">
-            <template v-slot="{ row }">     <!-- 会回传三个参数(文档有写) -->
-                <img :src="row.logoUrl" width="100px;">
+            <template #default="scope">     <!-- 会回传三个参数(文档有写) -->
+                <img :src="scope.row.logoUrl" width="100px;">
             </template>
         </el-table-column>
         <el-table-column label="品牌操作">
-            <template #>
-                <el-button @click="updateBrand" type="primary" icon="Edit" circle></el-button>
-                <el-button @click="deleteBrand" type="warning" icon="Delete" circle></el-button>
+            <template v-slot="scope">
+                <el-button @click="updateBrand(scope.row)" type="primary" icon="Edit" circle></el-button>
+                <el-popconfirm :title="`你确定要删除${scope.row.tmName}吗?`" width="240px" icon="Delete" @confirm="deleteBrand(scope.row.id)" cancel="">
+                    <template #reference>
+                        <el-button type="warning" icon="Delete" circle></el-button>
+                    </template>
+                </el-popconfirm>
             </template>
         </el-table-column>
     </el-table>
@@ -22,11 +26,11 @@
         @current-change="changePageNumber" @size-change="sizeChange"/>
 
     <el-dialog v-model="dialogVisable" :title="dialogTitle">
-        <el-form style="width: 80%; margin: 0 auto;">
-            <el-form-item label="品牌名称" label-width="80px">
+        <el-form style="width: 80%; margin: 0 auto;" :model="brandParams" ref="formRef" :rules="rules">  <!--表单校验第一步，用model告诉数据收集到了谁身上-->
+            <el-form-item label="品牌名称" label-width="100px" prop="tmName">    <!--表单校验第二步，加上prop-->
                 <el-input placeholder="输入品牌名称" v-model="brandParams.tmName"></el-input>
             </el-form-item>
-            <el-form-item label="品牌LOGO" label-width="80px">
+            <el-form-item label="品牌LOGO" label-width="100px" prop="logoUrl">
                 <!-- action是请求url, 必须加有api，否则不处理请求 -->
                 <el-upload
                     class="avatar-uploader"
@@ -47,7 +51,7 @@
 </template>
 
 <script lang="ts" setup>
-import { BrandResponseData, Record, reqGetHasBrand } from '@/api/product/brand';
+import { BrandResponseData, Record, reqAddOrUpdateBrand, reqDeleteBrand, reqGetHasBrand } from '@/api/product/brand';
 import { ElMessage, UploadProps } from 'element-plus';
 import { onMounted, reactive, ref } from 'vue';
 
@@ -59,6 +63,8 @@ const brandArr = ref<Record[]>([])    //  表格数据
 const dialogVisable = ref(false) //  对话框是否显示
 const dialogTitle = ref('')     //  对话框标题
 
+const formRef = ref()
+
 const brandParams = reactive<Record>({
     tmName: '',
     logoUrl: '',
@@ -66,11 +72,9 @@ const brandParams = reactive<Record>({
 
 const getBrand = async () => {
     const result:BrandResponseData = await reqGetHasBrand(pageNumber.value, pageSize.value);
-    console.log(result)
     if(result.code === 200){
         total.value = result.data.total
         brandArr.value = result.data.records;
-        console.log(brandArr.value)
     }
 }
 
@@ -85,16 +89,26 @@ const sizeChange = async () => {  //  下拉菜单变化的时候触发，数据
 }
 
 const addBrand = () => {
+    brandParams.tmName = brandParams.logoUrl = ''
     dialogVisable.value = true
     dialogTitle.value = "添加品牌"
+    brandParams.id = 0
+    formRef.value?.clearValidate('tmName')  //  清楚错误信息
+    formRef.value?.clearValidate('logoUrl')
 }
 
-const deleteBrand = () => {
-    dialogVisable.value = true
-    dialogTitle.value = "删除品牌"
+const deleteBrand = async (id:number) => {
+    const result = await reqDeleteBrand(id);
+    if(result.code===200)   {
+        getBrand();
+        ElMessage({type:'success', message: '删除成功'});
+        changePageNumber(brandArr.value.length > 1 ? pageNumber.value : pageNumber.value -1)
+    }
+    else    ElMessage.error("删除失败")
 }
 
-const updateBrand = () => {
+const updateBrand = (row:Record) => {
+    Object.assign(brandParams, row)     //  ES6语法，将两个对象合并
     dialogVisable.value = true
     dialogTitle.value = "修改品牌"
 }
@@ -103,7 +117,16 @@ const cancel = () => {
     dialogVisable.value = false;
 }
 
-const confirm = () => {
+const confirm = async () => {
+    await formRef.value.validate()     //  校验不通过后续代码不执行，单词别写错了！
+    const result = await reqAddOrUpdateBrand(brandParams);
+    console.log(result)
+    if(result.code === 200) {
+        ElMessage({type: 'success', message: brandParams.id ? '修改品牌成功' : '添加品牌成功'});
+        getBrand();
+    }   else    {
+        ElMessage.error(brandParams.id ? '修改品牌失败' : '添加品牌失败');
+    }
     dialogVisable.value = false;
 }
 
@@ -118,9 +141,30 @@ const beforeAvatarUpload:UploadProps['beforeUpload'] = (rawFile) => {
 
 const handleAvatarSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
     //  response是这次上传图片post请求服务器返回的数据
-    //  收集图片上传图片的地址，添加一个新品牌的时候带给服务器
+    //  收集图片上传图片的地址，添加一个新品牌的时候带给服务器（就是你上传文件后，服务器告诉你怎么访问到这张图片，地址是多少）
     brandParams.logoUrl = response.data;
 } 
+
+const validatorTmName = (rule:any, value:string, callback:any) => {   //  传入规则对象、数据内容、
+    //  表单元素失去焦点时，触发此方法
+    if(value.trim().length >= 2)  callback();     //  校验通过
+    else    callback(new Error('品牌名称应该大于等于两位'))     //  校验失败
+}
+
+const validatorLogoUrl = (rule:any, value:string, callback:any) => {
+    console.log(147, value)
+    if(value)   callback();
+    else        callback(new Error("图片务必上传"))
+}
+
+const rules = {
+    tmName: [
+        { required: true, trigger: 'blur', validator: validatorTmName }     //  表单失去焦点时校验
+    ],
+    logoUrl: [
+        { required: true, trigger: 'change', validator: validatorLogoUrl }
+    ]
+}
 
 onMounted(()=>{
     getBrand();

@@ -3,7 +3,8 @@ import request from "@/utils/request"
 enum API {
     BRAND_URL = '/admin/product/baseTrademark/', //  获取已有商品列表
     ADDBRAND_URL = '/admin/product/baseTrademark/save/',    //  添加新品牌
-    UPDATEBRAND_URL = '/admin/product/baseTrademark/update/'    //  修改品牌
+    UPDATEBRAND_URL = '/admin/product/baseTrademark/update/',    //  修改品牌
+    DELETE_URL = '/admin/product/baseTrademark/remove/',
 }
 
 export interface ResponseData {
@@ -39,3 +40,5 @@ export const reqAddOrUpdateBrand = async (data:Record) => {
         return request.post<any, any>(API.ADDBRAND_URL)
     }
 } 
+
+export const reqDeleteBrand = (id:number) => request.delete<any,any>(API.DELETE_URL)
