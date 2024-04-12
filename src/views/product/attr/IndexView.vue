@@ -32,7 +32,11 @@
             <el-table-column label="操作" width="120px">
                 <template #default="scope">
                     <el-button @click="editAttr(scope.row)" type="primary" size="small" icon="Edit" round></el-button>
-                    <el-button @click="deleteAttr(scope.row)" type="warning" size="small" icon="Delete" round></el-button>
+                    <el-popconfirm title="你确定要删除它吗？" @confirm="deleteAttr(scope.row.id)" @cancel="()=>{}" confirm-button-text="确定" cancel-button-text="取消" icon="Warning" icon-color="red" width="200px">
+                        <template #reference>
+                            <el-button type="warning" size="small" icon="Delete" round></el-button>
+                        </template>
+                    </el-popconfirm>
                 </template>
             </el-table-column>
         </el-table>
@@ -61,7 +65,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Attr, AttrResponseData, CategoryObj, CategoryResponseData, reqAddOrUpdateAttr, reqC1, reqC2, reqC3, reqGetAttr } from '@/api/product/attr';
+import { Attr, AttrResponseData, CategoryObj, CategoryResponseData, reqAddOrUpdateAttr, reqC1, reqC2, reqC3, reqGetAttr, reqRemoveAttr } from '@/api/product/attr';
 import { ElMessage } from 'element-plus';
 import { onMounted, ref, watch } from 'vue';
 
@@ -89,6 +93,15 @@ const changeDialogChoice = (n:number)=>{
     dialogChoice.value = n
 }
 
+const getAttrArray = async() => {
+    const result = await reqGetAttr(c1Id.value, c2Id.value, c3Id.value)
+    if(result.code === 200)  {
+        attrArray.value = result.data;
+        return true;
+    }
+    return false;
+}
+
 const changeHappenOnFirstSelect = async() => {
     const result:CategoryResponseData = await reqC2(c1Id.value);
     c2Arr.value = result.data;
@@ -109,8 +122,12 @@ const addAttrIntoTable = () => {
     })
 }
 
-const deleteAttr = (attr:Attr) => {
-    console.log("92")
+const deleteAttr = async(id:number) => {
+    const deleteResult = await reqRemoveAttr(id)
+    if(deleteResult.code===200)   {
+        getAttrArray()
+        ElMessage({type: 'success', message: '删除成功'});
+    }   else    ElMessage.error("删除失败")
 }
 
 const editAttr = (attr:Attr) => {
