@@ -22,6 +22,7 @@ export interface AttrValue {
     attrId: number|string,
     id: number|string,
     valueName: string,
+    isInputVisable: boolean
 }
 
 export interface Attr {
