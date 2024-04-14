@@ -2,12 +2,12 @@
     <el-card>
         <el-form :inline="true">
             <el-form-item label="一级分类">
-                <el-select class="el-select" v-model="categoryStore.c1Id" @change="changeHappenOnFirstSelect" :disabled="dialogChoice!=0">
+                <el-select class="el-select" v-model="categoryStore.c1Id" @change="categoryStore.changeHappenOnFirstSelect" :disabled="dialogChoice!=0">
                     <el-option v-for="(c1,index) in categoryStore.c1Arr" :key="index" :label="c1.name" :value="c1.id"></el-option>                        
                 </el-select>
             </el-form-item>
             <el-form-item label="二级分类">
-                <el-select class="el-select" v-model="categoryStore.c2Id" @change="changeHappenOnSecondSelect" :disabled="dialogChoice!=0">
+                <el-select class="el-select" v-model="categoryStore.c2Id" @change="categoryStore.changeHappenOnSecondSelect" :disabled="dialogChoice!=0">
                     <el-option v-for="(c2,index) in categoryStore.c2Arr" :key="index" :label="c2.name" :value="c2.id"></el-option>                        
                 </el-select>
             </el-form-item>
@@ -30,7 +30,7 @@
                     <el-button type="primary" size="small" icon="Plus" title="添加SPU"></el-button>
                     <el-button type="primary" size="small" icon="Edit" title="修改SPU"></el-button>
                     <el-button type="primary" size="small" icon="View" title="查看SPU列表"></el-button>
-                    <el-popconfirm :title="`你确定要删除'${row.skuName}'`" width="200px">
+                    <el-popconfirm :title="`你确定要删除'${row.spuName}'吗`" width="200px" @confirm="deleteSpu(row)">
                         <template #reference>
                             <el-button type="danger" size="small" icon="Delete"></el-button>
                         </template>
@@ -45,32 +45,20 @@
 </template>
 
 <script lang="ts" setup>
-import { CategoryResponseData, reqC1, reqC2, reqC3 } from '@/api/product/attr';
+import { reqC1 } from '@/api/product/attr';
 import { HasSpuResponseData, SpuData, reqHasSPU } from '@/api/product/spu';
 import { onMounted, ref, watch } from 'vue';
 import { useCategoryStore } from '@/store/category';
 
 const categoryStore = useCategoryStore();
-
-const cardChoice = ref<number>(0)
 const records = ref<SpuData[]>([])    //  存储已有SPU的数据
 
-const dialogChoice = ref<number>(0)     //  场景，控制显示哪一页的card
+const cardChoice = ref<number>(0)     //  场景，控制显示哪一页的card
+
+const dialogChoice = ref<number>(0)     //  禁用三个el-select
 const currentPageNumber = ref(1)    //  当前页码
 const dataTotalCount = ref(0)   //  数据总量
 const pageSize = ref(8)     //  每页数据个数
-
-const changeHappenOnFirstSelect = async() => {
-    const result:CategoryResponseData = await reqC2(categoryStore.c1Id);
-    categoryStore.c2Arr = result.data;
-    categoryStore.c3Id = categoryStore.c2Id = '';
-}
-
-const changeHappenOnSecondSelect = async() => {
-    const result = await reqC3(categoryStore.c2Id);
-    categoryStore.c3Arr = result.data;
-    categoryStore.c3Id = ''
-}
 
 const getHasSpu = async (pager = 1) => {   //  获取三级分类下全部已有的SPU
     currentPageNumber.value = pager;
@@ -79,8 +67,6 @@ const getHasSpu = async (pager = 1) => {   //  获取三级分类下全部已有
         records.value = result.data.records;
         dataTotalCount.value = result.data.total
     }
-    console.log(result.data.total)
-    console.log(currentPageNumber.value)
 }
 
 watch(()=>categoryStore.c3Id, ()=>{

@@ -1,5 +1,5 @@
 <template>
-    <div>spu管理
+    <div>sku管理
     </div>
 </template>
 
