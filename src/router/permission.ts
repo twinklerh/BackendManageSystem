@@ -18,17 +18,18 @@ router.beforeEach(async (to, from, next) => {
             if (username) next();
             else {
                 try{
-                    await userStore.userInfo();
+                    //await userStore.userInfo();
                     next();
                 } catch(error)   {  //  token过期，或者用户手动修改本地token
-                    await userStore.userLogOut();
+                    //await userStore.userLogOut();
                     next({path: '/login'})
                 }
             }
         }
     }   else    {
-        if(to.name === 'login')     next();
-        else                        next({name: 'login'})
+        //if(to.name === 'login')     next();
+        //else                        next({name: 'login'})
+        next()
     }
 })
  // eslint-disable-next-line

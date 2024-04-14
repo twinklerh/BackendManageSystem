@@ -39,8 +39,9 @@ const login = async() => {
     await loginFormRef.value.validate();   //  验证表单是否满足规则
     loginLoading.value = true;
     try {
-        await userStore.login(loginForm);
-        ElNotification({type: 'success', message: '欢迎回来', title: `Hi, ${getWhenTime()}好`});
+        const result = await userStore.login(loginForm);
+        if(result==='success')   ElNotification({type: 'success', message: '欢迎回来', title: `Hi, ${getWhenTime()}好`});
+        else                     ElNotification({type: 'error', message: result });
         router.push('/')
     } catch(error)  {
         // router.push('/login')

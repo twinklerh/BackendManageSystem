@@ -15,19 +15,19 @@ export interface loginResponseData {    //  登录接口 后端返回给前端�
     ok: boolean
 }
 
-interface user {
-    checkUser: {
-        userId: number,
-        avatar: string,
-        username: string,
-        password: string,
-        desc: string,
-        roles: string[],
-        buttons: string[],
-        routes: string[],
-        token: string,
-    }
-}
+// interface user {
+//     checkUser: {
+//         userId: number,
+//         avatar: string,
+//         username: string,
+//         password: string,
+//         desc: string,
+//         roles: string[],
+//         buttons: string[],
+//         routes: string[],
+//         token: string,
+//     }
+// }
 
 export interface userInfoResponseData { 
     code: number, messaage: string, ok: boolean,
@@ -53,10 +53,13 @@ export const useUserStore = defineStore('user', {
     actions: {
         async login(data: loginForm) {
             const result: loginResponseData = await reqLogin(data);
+            console.log(result)
             if (result.code === 200) {
                 this.token = result.data;
                 localStorage.setItem("token", result.data)
+                return 'success'
             }
+            return result.data
         },
         async userInfo() {
             const result:userInfoResponseData = await reqUserInfo();

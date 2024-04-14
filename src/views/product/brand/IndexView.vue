@@ -21,8 +21,8 @@
             </template>
         </el-table-column>
     </el-table>
-    <el-pagination v-model:current-page="pageNumber" v-model:page-size="pageSize" 
-        :total=total layout="prev,pager,next,jumper,->,sizes,total" background
+    <el-pagination v-model:current-page="pageNumber" v-model:page-size="pageSize" :total=total
+        layout="prev,pager,next,jumper,->,sizes,total" background
         @current-change="changePageNumber" @size-change="sizeChange"/>
 
     <el-dialog v-model="dialogVisable" :title="dialogTitle">
