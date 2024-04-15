@@ -27,14 +27,14 @@ export interface HasSpuResponseData extends ResponseData {  //  获取SKU时，�
     }
 }
   
-export interface Trademark {
+export interface Brand {
     id: number
     tmName: string
     logoUrl: string
 }
   
-export interface AllTradeMark extends ResponseData {
-    data: Trademark[]
+export interface AllBrand extends ResponseData {
+    data: Brand[]
 }
   
 export interface SpuImg {
@@ -119,7 +119,7 @@ export interface SkuInfoData extends ResponseData {
 
 enum API {
     HASSPU_URL = '/admin/product/',
-    ALLTRADEMARK_URL = '/admin/product/baseTrademark/getTrademarkList',
+    ALLBrand_URL = '/admin/product/baseTrademark/getTrademarkList',
     IMAGE_URL = '/admin/product/spuImageList/',
     SPUHASSALEATTR_URL = '/admin/product/spuSaleAttrList/',
     ALLSALEATTR_URL = '/admin/product/baseSaleAttrList',
@@ -132,4 +132,30 @@ enum API {
 
 export const reqHasSPU = (current_page:number, page_size:number, c3Id:number) => {
     return request.get<any,HasSpuResponseData>(API.HASSPU_URL + `${current_page}/${page_size}?category3Id=${c3Id}`)
+}
+
+export const reqAllBrand = () => {
+    return request.get<any, AllBrand>(API.ALLBrand_URL)
+}
+export const reqSpuImageList = (spuId: number) => {
+    return  request.get<any, SpuHasImg>(API.IMAGE_URL + spuId);
+}
+export const reqSpuHasSaleAttr = (spuId: number) => {
+    return request.get<any, SaleAttrResponseData>(API.SPUHASSALEATTR_URL + spuId)
+}
+export const reqAllSalAttr = () => {
+    return request.get<any, any>(API.ALLSALEATTR_URL)
+}
+export const reqAddOrUpdateSpu = (data: SpuData) => {
+    if (data.id)    return request.post<any, any>(API.UPDATESPU_URL, data)
+    else            return request.post<any, any>(API.ADDSPU_URL, data)
+}
+export const reqAddSku = (data: SkuData) => {
+    return request.post<any, any>(API.ADDSKU_URL, data)
+}
+export const reqSkuList = (spuId: number | string) => {
+    return request.get<any, SkuInfoData>(API.SKUINFO_URL + spuId)
+}
+export const reqRemoveSpu = (spuId: number | string) => {
+    return request.delete<any, any>(API.REMOVESPU_URL + spuId)
 }
