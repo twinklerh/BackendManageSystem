@@ -39,10 +39,6 @@
                 <el-icon><SoldOut /></el-icon>
                 <template #title>spu管理</template>
             </el-menu-item>
-            <el-menu-item index="/home/product/sku">
-                <el-icon><Coin /></el-icon>
-                <template #title>sku管理</template>
-            </el-menu-item>
         </el-sub-menu>
     </el-menu>
 </template>

@@ -27,7 +27,6 @@
             <el-table-column label="SPU描述" width="275px" prop="description"></el-table-column>
             <el-table-column label="SPU操作">
                 <template #="{ row }">
-                    <el-button type="primary" size="small" icon="Plus" title="添加SPU"></el-button>
                     <el-button type="primary" size="small" icon="Edit" title="修改SPU" @click="updateSpu(row)"></el-button>
                     <el-button type="primary" size="small" icon="View" title="查看SPU列表"></el-button>
                     <el-popconfirm :title="`你确定要删除'${row.spuName}'吗`" width="200px" @confirm="deleteSpu(row)">
@@ -44,16 +43,14 @@
     </el-card>
 
     <SpuForm v-show="cardChoice===1" ref="spu" @changeCard="changeCard"></SpuForm>     <!--添加或修改Spu-->
-    <SkuForm v-show="cardChoice===2"></SkuForm>     <!--添加Sku-->
 </template>
 
 <script lang="ts" setup>
 import { reqC1 } from '@/api/product/attr';
-import { HasSpuResponseData, SpuData, reqHasSPU } from '@/api/product/spu';
+import { HasSpuResponseData, SpuData, reqHasSPU, reqRemoveSpu } from '@/api/product/spu';
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useCategoryStore } from '@/store/category';
 import SpuForm from './SpuForm.vue';
-import SkuForm from './SkuForm.vue';
 
 const categoryStore = useCategoryStore();
 const records = ref<SpuData[]>([])    //  存储已有SPU的数据
@@ -89,6 +86,8 @@ const changeCard = (obj:any) => {
 
 const deleteSpu = async (row:SpuData) => {
     console.log(555)
+    const result = await reqRemoveSpu(row.id as number)
+    getHasSpu()
 }
 
 const updateSpu = (row: SpuData) => {

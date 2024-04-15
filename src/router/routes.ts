@@ -74,12 +74,6 @@ export const routes = [
                         meta: { title: '品牌管理', icon: 'Umbrella', hidden: false },
                     },
                     {
-                        path: 'sku',
-                        name: 'sku',
-                        component: ()=>import('@/views/product/sku/IndexView.vue'),
-                        meta: { title: 'sku管理', icon: 'Coin', hidden: false },
-                    },
-                    {
                         path: 'spu',
                         name: 'spu',
                         component: ()=>import('@/views/product/spu/IndexView.vue'),
