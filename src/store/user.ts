@@ -15,20 +15,6 @@ export interface loginResponseData {    //  登录接口 后端返回给前端�
     ok: boolean
 }
 
-// interface user {
-//     checkUser: {
-//         userId: number,
-//         avatar: string,
-//         username: string,
-//         password: string,
-//         desc: string,
-//         roles: string[],
-//         buttons: string[],
-//         routes: string[],
-//         token: string,
-//     }
-// }
-
 export interface userInfoResponseData { 
     code: number, messaage: string, ok: boolean,
     data: {
