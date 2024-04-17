@@ -22,7 +22,7 @@
                 <template #="{ row }">
                     <el-button size="small" icon="User" @click="setPermission(row)">分配权限</el-button>
                     <el-button type="primary" size="small" icon="Edit" @click="updateRole(row)">编辑</el-button>
-                    <el-popconfirm :title="`你确定要删除${row.rowName}?`" width="260px" @confirm="removeRole(row.id)">
+                    <el-popconfirm :title="`你确定要删除“${row.roleName}”?`" width="260px" @confirm="removeRole(row.id)">
                         <template #reference>
                             <el-button type="danger" size="small" icon="Delete">删除</el-button>
                         </template>
@@ -159,9 +159,9 @@ const drawerConfirm = async() => {
     const permissionId = arr.concat(arr1)
     const res: any = await reqSetPermission(roleId, permissionId)
     if (res.code === 200) {
-        drawerVisible.value = false
+        drawerVisible.value = false;
         ElMessage({ type: 'success', message: '分配权限成功',})
-        window.location.reload()
+        currentChange()
     }
 }
 
