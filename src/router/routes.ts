@@ -1,7 +1,7 @@
 export const routes = [
     {
         path: '/',
-        redirect: '/home/screen',
+        redirect: '/home/menuhome',
         meta: { hidden: true},
     },
     {
@@ -13,7 +13,7 @@ export const routes = [
     {
         path: '/notfound',
         name: 'notfound',
-        component: () => import('@/views/NotFoundView.vue'),
+        component: () => import('@/views/notfound/NotFoundView.vue'),
         meta: { title: 'notfound', hidden: true},
     },
     {
@@ -26,9 +26,15 @@ export const routes = [
         path: '/home',
         name: 'home',
         component: ()=>import("@/views/layout/IndexView.vue"),
-        redirect: '/home/screen',
+        redirect: '/home/menuhome',
         meta: { title: '', icon: 'HomeFilled', hidden: true },
         children: [
+            {
+                path: 'menuhome',
+                name: 'menuhome',
+                component: () => import('@/views/home/HomeView.vue'),
+                meta: { title: '首页', icon: 'Home', hidden: false }
+            },
             {
                 path: 'acl',
                 name: 'acl',
@@ -81,12 +87,12 @@ export const routes = [
                     }
                 ]
             },
-            {
-                path: 'screen',
-                name: 'screen',
-                component: ()=>import('@/views/screen/ScreenView.vue'),
-                meta: { title: '数据大屏', icon: 'Monitor', hidden: false },
-            },
         ]
+    },
+    {
+        path: '/home/screen',
+        name: 'screen',
+        component: ()=>import('@/views/screen/ScreenView.vue'),
+        meta: { title: '数据大屏', icon: 'Monitor', hidden: false },
     },
 ];

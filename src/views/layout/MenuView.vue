@@ -1,5 +1,9 @@
 <template>
     <el-menu :collapse="settingStore.isMenuFold" :default-active="route.path" background-color="#001529" text-color="white" style="border:0!important;" router>
+        <el-menu-item index="/home/menuhome">
+            <el-icon><HomeFilled /></el-icon>
+            <span>首页</span>
+        </el-menu-item>
         <el-menu-item index="/home/screen">
             <el-icon><Monitor/></el-icon>
             <span>数据大屏</span>
