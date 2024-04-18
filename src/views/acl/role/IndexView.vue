@@ -12,13 +12,13 @@
     </el-card>
     <el-card style="margin-top: 10px;">
         <el-button type="primary" @click="addRole">添加职位</el-button>
-        <el-table border style="margin-top: 10px;" :data="roleList">
-            <el-table-column label="#" type="index" fixed/>
-            <el-table-column label="ID" width="90px" align="center" prop="id"/>
-            <el-table-column label="职位名称" width="150px" align="center" prop="roleName"/>
-            <el-table-column label="创建时间" width="150px" align="center" prop="createTime" show-overflow-tooltip/>
-            <el-table-column label="更新时间" width="150px" align="center" prop="updateTime" show-overflow-tooltip/>
-            <el-table-column label="操作" align="center">
+        <el-table border style="margin: 10px 0px;" :data="roleList" stripe>
+            <el-table-column label="#" width="12px" type="index" fixed/>
+            <el-table-column label="ID" width="100px" align="center" prop="id"/>
+            <el-table-column label="职位名称" width="120px" align="center" prop="roleName" show-overflow-tooltip/>
+            <el-table-column label="创建时间" width="190px" align="center" prop="createTime" show-overflow-tooltip/>
+            <el-table-column label="更新时间" width="190px" align="center" prop="updateTime" show-overflow-tooltip/>
+            <el-table-column label="操作" align="center" width="300px">
                 <template #="{ row }">
                     <el-button size="small" icon="User" @click="setPermission(row)">分配权限</el-button>
                     <el-button type="primary" size="small" icon="Edit" @click="updateRole(row)">编辑</el-button>
@@ -67,7 +67,7 @@ import { ElMessage } from 'element-plus';
 import { nextTick, onMounted, ref } from 'vue';
 
 const searchContent = ref('')
-const pagination = ref({ currentPage: 1, total: 1, pageSize : 5 })
+const pagination = ref({ currentPage: 1, total: 1, pageSize : 8 })
 const roleList = ref<RoleData[]>([]);
 const dialogVisible = ref(false)
 const drawerVisible = ref(false)

@@ -2,7 +2,7 @@
     <el-card style="height: 75px; margin-bottom: 10px;">
         <el-form :inline="true" class="form">
             <el-form-item label="用户名：">
-                <el-input style="width: 220px;" placeholder="请输入用户名" v-model="searchContent" clearable />
+                <el-input style="width: 220px;" placeholder="输入用户名进行搜索" v-model="searchContent" clearable />
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" :disabled="searchContent.length ? false : true">搜索</el-button>
@@ -172,7 +172,6 @@ const submitInfomation = async () => {
         userParam.username = userParam.name = userParam.password = ''
         ElMessage({ type: 'success', message: userParam.id?'更新成功':'添加成功' });
         currentChange()
-        window.location.reload();
     }   else    ElMessage({ type: 'success', message: userParam.id?'更新失败':'添加失败' });
 }
 
@@ -233,6 +232,7 @@ const deleteSelectUser = async () => {
         return item.id
     })
     let res: any = await reqSelectUser(idList)
+    console.log(res)
     if (res.code === 200) {
         ElMessage({ type: 'success', message: '删除成功' })
         currentChange(userArr.value.length > 1 ? pagination.value.currentPage : pagination.value.currentPage - 1)
