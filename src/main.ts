@@ -8,6 +8,7 @@ import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import '@/style/index.scss'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import pinia from './store'
+import 'element-plus/theme-chalk/dark/css-vars.css' //  暗黑模式需要的样式
 
 const app = createApp(App).use(pinia).use(router)
 
