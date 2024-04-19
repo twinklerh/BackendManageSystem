@@ -4,7 +4,6 @@
         <img src="./images/dataScreen-title.png">
         <div ref="echartLineRef" style="height: 100%;"></div>
     </div>
-    
 </template>
 
 <script lang="ts" setup>

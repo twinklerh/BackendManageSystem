@@ -6,10 +6,12 @@
                 <div class="left"><LeftView /></div>
                 <div class="center">
                     <MainView class="main-in-center" />
-                    <LineView class="line-in-center"/>
+                    <LineView class="line-in-center" />
                 </div>
                 <div class="right">
-                    
+                    <AttractionView class="top-in-right" />
+                    <TouristView class="middle-in-right" />
+                    <ConsumeView class="bottom-in-right" />
                 </div>
             </div>
         </div>
@@ -22,6 +24,9 @@ import TopView from './TopView.vue';
 import LeftView from './LeftView.vue';
 import MainView from './MainView.vue';
 import LineView from './LineView.vue';
+import AttractionView from './AttractionView.vue';
+import TouristView from './TouristView.vue';
+import ConsumeView from './ConsumeView.vue';
 
 const screenRef = ref();
 
@@ -42,7 +47,7 @@ onMounted(() => {
 .container {
     height: 100vh;
     width: 100vw;
-    background: url("./images/bg.png") no-repeat;
+    background: url(./images/bg.png) no-repeat;
     background-size: cover;
 }
 .screen {
@@ -73,7 +78,6 @@ onMounted(() => {
     }
     .right {
         flex: 1;
-        background-color: red;
     }
 }
 </style>

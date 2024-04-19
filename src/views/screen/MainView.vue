@@ -8,7 +8,6 @@ import * as echarts from 'echarts'
 import chinaJson from './charts/china.json';
 import { mapSetting } from './charts/echartMapSetting';
 const echartMapRef = ref()
-console.log(chinaJson)
 
 onMounted(()=>{
     echarts.registerMap('China', chinaJson as any);
