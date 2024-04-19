@@ -4,8 +4,13 @@
             <div class="top"><TopView /></div>
             <div class="main">
                 <div class="left"><LeftView /></div>
-                <div class="center">中</div>
-                <div class="right">右</div>
+                <div class="center">
+                    <MainView class="main-in-center" />
+                    <LineView class="line-in-center"/>
+                </div>
+                <div class="right">
+                    
+                </div>
             </div>
         </div>
     </div>
@@ -15,15 +20,15 @@
 import { onMounted, ref } from 'vue';
 import TopView from './TopView.vue';
 import LeftView from './LeftView.vue';
+import MainView from './MainView.vue';
+import LineView from './LineView.vue';
 
 const screenRef = ref();
 
 function getScale(w=1920, h=1080)   {
     const ww = window.innerWidth / w;
     const hh = window.innerHeight / h;
-    console.log(window.innerWidth)
-    console.log(window.innerHeight)
-    return ww<hh ? ww : hh;
+    return ww < hh ? ww : hh;
 }
 
 onMounted(() => {
@@ -57,6 +62,14 @@ onMounted(() => {
     }
     .center {
         flex: 2;
+        display: flex;
+        flex-direction: column;
+        .main-in-center {
+            flex: 3;
+        }
+        .line-in-center {
+            flex: 1;
+        }
     }
     .right {
         flex: 1;
