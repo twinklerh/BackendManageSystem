@@ -36,7 +36,6 @@ const settingStore = useSettingStore();
         width: $base-menu-width;
         height: 100vh;
         background-color: $base-menu-background;
-        transition: all 5000ms;
         .logo {
             width: 100%;
             height: $base-menu-logo-height;

@@ -26,15 +26,15 @@ const userStore = useUserStore()
 .box {
   display: flex;
   .avatar {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
   }
   .footer {
     margin-left: 20px;
     margin-top: 15px;
     .title {
-      font-size: 35px;
+      font-size: 25px;
       margin-bottom: 30px;
       font-weight: 900;
       .gradient {

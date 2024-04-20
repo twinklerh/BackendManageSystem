@@ -11,10 +11,9 @@ import { nextTick, ref, watch } from 'vue';
 import { useSettingStore } from './store/setting';
 const settingStore = useSettingStore();
 const flagDestory = ref(true);
-watch(()=>settingStore.refreshInNavBarButton, ()=>{
+watch(()=>settingStore.refreshInNavBarButton, ()=>{   //  卸载所有组件再重新加载所有组件
   flagDestory.value = false;  //  销毁组件
-  nextTick(()=>{  //  不用延时器，因为延时器不靠谱，你不知道什么时候组件销魂完毕
-    //  nextTick能保证响应式数据发生变化后你的dom更新完毕了
+  nextTick(()=>{
     flagDestory.value = true;
   })
 })
@@ -23,15 +22,15 @@ watch(()=>settingStore.refreshInNavBarButton, ()=>{
 <style lang="scss" scoped>
 .fade-enter-from {
   opacity: 0;
-  transform: scale(0);
+  // transform: scale(0.9);   //  添加自己写的动画
 }
 
 .fade-enter-active{
-  transition: all;
+  transition: all 0s;
 }
 
-.fade-enter-enter-to {
+.fade-enter-to {
   opacity: 1;
-  transition: scale(1);
+  // transform: scale(1);
 }
 </style>

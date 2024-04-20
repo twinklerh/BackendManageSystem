@@ -1,18 +1,18 @@
 <template>
     <el-card style="margin-top: 10px;">
         <el-form style="margin-top: 10px;margin-left: 50px;">
-            <el-form-item label="SPU名称">
-                <el-input placeholder="请输入SPU名称" v-model="SpuParams.spuName"></el-input>
+            <el-form-item label="商品名称">
+                <el-input placeholder="请输入商品名称" v-model="SpuParams.spuName"></el-input>
             </el-form-item>
-            <el-form-item label="SPU品牌">
+            <el-form-item label="商品品牌">
                 <el-select style="width: 220px;" v-model="SpuParams.tmId">
                     <el-option :label="item.tmName" v-for="(item, index) in allBrand" :value="item.id" :key="index"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="SPU描述">
-                <el-input type="textarea" v-model="SpuParams.description" placeholder="请输入SPU描述"></el-input>
+            <el-form-item label="商品描述">
+                <el-input type="textarea" v-model="SpuParams.description" placeholder="请输入商品描述"></el-input>
             </el-form-item>
-             <el-form-item label="SPU图标">
+             <el-form-item label="商品图标">
                 <!-- file-list告诉你，你上传之后的图片列表到底是显示图片的缩略图还是用文字列表或其它显示 
                     on-preview是照片墙点击预览放大后的效果 -->
                 <el-upload v-model:file-list="imgList" action="http://sph-api.atguigu.cn/admin/product/fileUpload" list-type="picture-card"
@@ -24,7 +24,7 @@
                     <!--w-full用来确保图片在对话框中水平填满整个宽度，以适应对话框的大小-->
                 </el-dialog>
             </el-form-item>
-            <el-form-item label="SPU销售属性" style="width: 920px;">
+            <el-form-item label="商品销售属性" style="width: 920px;">
                 <el-select v-model="saleAttrIdAndValueName" :placeholder="unSelectSaleAttr.length ? `还未选择${unSelectSaleAttr.length}个` : '暂无数据可选择'" style="width: 220px;">
                     <el-option :label="item.name" v-for="(item, index) in unSelectSaleAttr" :key="index" :value="`${item.id}:${item.name}`"></el-option>
                 </el-select>

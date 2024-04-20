@@ -29,15 +29,15 @@ import { useUserStore } from '@/store/user';
 import { useRouter } from 'vue-router';
 import { ElNotification } from 'element-plus';
 import { getWhenTime } from '@/utils/time';
+import { debounce } from 'lodash';
 const router = useRouter();
 const userStore = useUserStore();
 const loginForm = reactive({ username: '', password: '' });
 const loginLoading = ref(false)
 const loginFormRef = ref();
 
-const login = async() => {
+const loginLogical = debounce(async() => {
     await loginFormRef.value.validate();   //  验证表单是否满足规则
-    loginLoading.value = true;
     try {
         const result = await userStore.login(loginForm);
         if(result==='success')   ElNotification({type: 'success', message: '欢迎回来', title: `Hi, ${getWhenTime()}好`});
@@ -48,15 +48,17 @@ const login = async() => {
     } finally {
         loginLoading.value = false;
     }
+}, 1000)
+
+const login = async () => {
+    loginLoading.value = true;
+    await loginLogical();
 }
 
-// const validateUsername = (rule:unknown, value:string, callback:(param?:Error)=>void)=>{  //  rule校验规则、value表单文本内容、规则放行函数
-//     if(value.length>=5)    {
-//         callback();
-//     }   else    {
-//         callback(new Error('账号长度在5~10位之间'))
-//     }
-// }
+const validatePassword = debounce((rule:unknown, value:string, callback:(param?:Error)=>void)=>{
+    if(value.length>=6 && value.length<=10)     callback();
+    else                                        callback(new Error('账号长度在6~10位之间'))
+}, 900)
 
 const rules = {
     username: [
@@ -65,7 +67,7 @@ const rules = {
         // { trigger: 'change', validator: validateUsername }  //  自定义校验规则
     ],
     password: [
-        { required: true, min: 6, message: '密码至少为6位', trigger: 'change'},
+        { trigger: 'change', validator: validatePassword },
     ],
 }
 

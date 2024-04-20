@@ -41,7 +41,7 @@
             </el-menu-item>
             <el-menu-item index="/home/product/spu">
                 <el-icon><SoldOut /></el-icon>
-                <template #title>spu管理</template>
+                <template #title>商品管理</template>
             </el-menu-item>
         </el-sub-menu>
     </el-menu>
